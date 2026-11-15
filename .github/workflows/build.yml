@@ -1,0 +1,26 @@
+name: Build cpbob.dll
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up the Visual Studio x64 compiler
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build cpbob.dll
+        shell: cmd
+        run: cl /nologo /O2 /GL /MT /EHsc /LD cpbob.cpp /link /OUT:cpbob.dll
+
+      - name: Save the DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpbob-dll
+          path: cpbob.dll
